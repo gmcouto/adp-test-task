@@ -2,6 +2,7 @@ const socket = io();
 let problem = {};
 let solution = {};
 let result = "";
+let automaticId = 0;
 function updateSolution() {
   try {
     const result = Number($('#solution').val());
@@ -54,4 +55,17 @@ socket.on('submit/callback', function(aResult){
   result = aResult;
   $('#result').text(result);
   $('#submitBtn').prop('disabled', false);
+});
+function automaticSolution() {
+  $('#fetchBtn').click();
+  setTimeout(function(){ $('#solveBtn').click() },2000);
+  setTimeout(function(){ $('#submitBtn').click() },4000);
+}
+$('#automatic').on('change',function(){
+  if (this.checked) {
+    automaticSolution();
+    automaticId = setInterval(automaticSolution,6000);
+  } else {
+    clearInterval(automaticId);
+  }
 });
