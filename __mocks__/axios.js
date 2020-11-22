@@ -1,4 +1,4 @@
-const axios = jest.createMockFromModule("axios");
+const axios = jest.createMockFromModule('axios');
 let mockResult = Object.create(null);
 function __setMockResult({ url, result }) {
   mockResult = Object.create(null);
