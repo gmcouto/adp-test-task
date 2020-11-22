@@ -3,7 +3,74 @@ let problem = {};
 let solution = {};
 let result = "";
 let automaticId = 0;
-function updateSolution() {
+
+function fetchStarted() {
+  $('#fetchBtn').prop('disabled', true);
+  $('#solveBtn').prop('disabled', true);
+  $('#solution').prop('disabled', true);
+  $('#submitBtn').prop('disabled', true);
+  $('#left').text("Fetching...");
+  $('#operation').text("Fetching...");
+  $('#right').text("Fetching...");
+}
+
+function fetchAction() {
+  socket.emit('fetch');
+}
+
+function fetchCallback(value) {
+  problem = value;
+  $('#left').text(problem.left);
+  $('#operation').text(problem.operation);
+  $('#right').text(problem.right);
+}
+
+function fetchDone() {
+  $('#fetchBtn').prop('disabled', false);
+  $('#solveBtn').prop('disabled', false);
+  $('#solution').prop('disabled', false);
+  onSolutionChanged();
+}
+
+function solveStarted() {
+  $('#solution').prop('disabled', true);
+  $('#solution').val('Solving...');
+}
+
+function solveAction() {
+  socket.emit('solve', problem);
+}
+
+function solveCallback(value) {
+  solution = value;
+  $('#solution').val(solution.result);
+}
+
+function solveDone() {
+  $('#solution').prop('disabled', false);
+  $('#submitBtn').prop('disabled', false);
+}
+
+function submitStarted() {
+  $('#submitBtn').prop('disabled', true);
+  $('#result').text("Submiting...");
+}
+
+function submitAction() {
+  socket.emit('submit', solution);
+}
+
+function submitCallback(value) {
+  result = value;
+  $('#result').text(result);
+}
+
+function submitDone() {
+  $('#submitBtn').prop('disabled', false);
+}
+
+// handles submit button state
+function onSolutionChanged() {
   try {
     const result = Number($('#solution').val());
     if(problem.id && !Number.isNaN(result)) {
@@ -16,56 +83,48 @@ function updateSolution() {
     $('#submitBtn').prop('disabled', true);
   }
 };
-$('#fetchBtn').click(function (e) {
-  $('#left').text("Fetching...");
-  $('#operation').text("Fetching...");
-  $('#right').text("Fetching...");
-  socket.emit('fetch');
-});
-$('#solveBtn').click(function (e) {
-  $('#solution').prop('disabled', true);
-  $('#solution').val('Solving...');
-  socket.emit('solve',problem);
-});
-$('#submitBtn').click(function (e) {
-  $('#submitBtn').prop('disabled', true);
-  $('#result').text("Submiting...");
-  socket.emit('submit', solution);
-});
-$('#solution').on('change', function(e){
-  updateSolution();
-});
-socket.on('fetch/callback', function(aProblem){
-  problem = aProblem;
-  $('#left').text(problem.left);
-  $('#operation').text(problem.operation);
-  $('#right').text(problem.right);
 
-  updateSolution();
-  $('#solveBtn').prop('disabled', false);
-  $('#solution').prop('disabled', false);
-});
-socket.on('solve/callback', function(aSolution){
-  solution = aSolution;
-  $('#solution').val(aSolution.result);
-  $('#solution').prop('disabled', false);
-  $('#submitBtn').prop('disabled', false);
-});
-socket.on('submit/callback', function(aResult){
-  result = aResult;
-  $('#result').text(result);
-  $('#submitBtn').prop('disabled', false);
-});
-function automaticSolution() {
+function uiAutomaticTaskSolving() {
   $('#fetchBtn').click();
   setTimeout(function(){ $('#solveBtn').click() },2000);
   setTimeout(function(){ $('#submitBtn').click() },4000);
 }
-$('#automatic').on('change',function(){
+
+function onUiAutomaticToggleChecked() {
   if (this.checked) {
-    automaticSolution();
-    automaticId = setInterval(automaticSolution,6000);
+    uiAutomaticTaskSolving();
+    automaticId = setInterval(uiAutomaticTaskSolving,6000);
   } else {
     clearInterval(automaticId);
   }
+}
+
+$('#fetchBtn').click(function (e) {
+  fetchStarted();
+  fetchAction();
 });
+socket.on('fetch/callback', function(value){
+  fetchCallback(value);
+  fetchDone();
+});
+
+$('#solveBtn').click(function (e) {
+  solveStarted();
+  solveAction();
+});
+socket.on('solve/callback', function(value){
+  solveCallback(value);
+  solveDone();
+});
+
+$('#submitBtn').click(function (e) {
+  submitStarted();
+  submitAction();
+});
+socket.on('submit/callback', function(value){
+  submitCallback(value);
+  submitDone();
+});
+
+$('#solution').on('change', onSolutionChanged);
+$('#automatic').on('change', onUiAutomaticToggleChecked);
