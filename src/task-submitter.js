@@ -2,6 +2,10 @@ const axios = require('axios');
 const { submitTaskUrl } = require('./adp-config');
 
 const submit = async (result) => {
-  return (await axios.post(submitTaskUrl, result)).data;
+  try {
+    return (await axios.post(submitTaskUrl, result)).data;
+  } catch (error) {
+    return error.response.data;
+  }
 };
 module.exports = { submit };

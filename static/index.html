@@ -18,19 +18,23 @@
         <h1>ADP Task Solver</h1>
       </div>
       <div class="row">
-        <div class="col-4" id="problem">1 of 3</div>
-        <div class="col-4" id="solution">1 of 3</div>
-        <div class="col-4" id="result">1 of 3</div>
+        <div class="col-4">
+          <p><span>Left:</span> <span id="left">Fetch a Problem First</span></p>
+          <p><span>Operation:</span> <span id="operation">Fetch a Problem First</span></p>
+          <p><span>Right:</span> <span id="right">Fetch a Problem First</span></p>
+        </div>
+        <div class="col-4"><p><span>Solution:</span><input id="solution" disabled=true/></p></div>
+        <div class="col-4" id="result">Submit task to see result</div>
       </div>
       <div class="row">
         <div class="col-4">
-          <input id="fetchBtn" class="btn btn-primary" type="button" value="Fetch">
+          <input id="fetchBtn" class="btn btn-primary" type="button" value="Fetch Task">
         </div>
         <div class="col-4">
-          <input id="solveBtn" class="btn btn-primary" type="button" value="Solve">
+          <input id="solveBtn" class="btn btn-primary" type="button" disabled=true value="Solve">
         </div>
         <div class="col-4">
-          <input id="submitBtn" class="btn btn-primary" type="button" value="Submit">
+          <input id="submitBtn" class="btn btn-primary" type="button" disabled=true value="Submit">
         </div>
       </div>
     </div>

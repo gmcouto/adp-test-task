@@ -33,10 +33,10 @@ const server = http.createServer((request, response) => {
 
   const contentType = mimeTypes[extname] || 'application/octet-stream';
 
-  fs.readFile(filePath, function (error, content) {
+  fs.readFile(filePath, (error, content) => {
     if (error) {
       if (error.code === 'ENOENT') {
-        fs.readFile('./404.html', function (error, content404) {
+        fs.readFile('./404.html', (error404, content404) => {
           response.writeHead(404, { 'Content-Type': 'text/html' });
           response.end(content404, 'utf-8');
         });
