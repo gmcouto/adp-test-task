@@ -4,7 +4,10 @@ const submitter = require('./task-submitter');
 
 const setupFetchEvent = (socket) => {
   socket.on('fetch', () => {
-    fetcher.fetch().then((problem) => socket.emit('fetch/callback', problem));
+    fetcher.fetch().then((problem) => {
+      console.info(`Problem fetched: ${JSON.stringify(problem)}`);
+      socket.emit('fetch/callback', problem);
+    });
   });
 };
 
@@ -16,7 +19,12 @@ const setupSolveEvent = (socket) => {
 
 const setupSubmitEvent = (socket) => {
   socket.on('submit', (solution) => {
-    submitter.submit(solution).then((result) => socket.emit('submit/callback', result));
+    submitter.submit(solution).then((result) => {
+      console.info(
+        `Submiting solution: ${JSON.stringify(solution)} \n Result found: ${JSON.stringify(result)}`
+      );
+      socket.emit('submit/callback', result);
+    });
   });
 };
 
