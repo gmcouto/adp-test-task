@@ -17,7 +17,8 @@
   },
   "homepage": "https://github.com/gmcouto/adp-test-task#readme",
   "dependencies": {
-    "axios": "^0.21.0"
+    "axios": "^0.21.0",
+    "socket.io": "^3.0.3"
   },
   "devDependencies": {
     "@types/jest": "^26.0.15",
