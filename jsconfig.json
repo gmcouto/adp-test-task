@@ -1,11 +1,9 @@
 {
-    "compilerOptions": {
-        "target": "es6",
-        "allowSyntheticDefaultImports": true
-    },
-    "typeAcquisition": {
-        "include": [
-            "jest"
-        ]
-    }
+  "compilerOptions": {
+    "target": "es6",
+    "allowSyntheticDefaultImports": true
+  },
+  "typeAcquisition": {
+    "include": ["jest"]
+  }
 }
